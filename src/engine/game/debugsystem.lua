@@ -25,7 +25,7 @@ function DebugSystem:init()
     self.heart = Sprite("player/heart_menu")
     self.heart.visible = true
     self.heart:setOrigin(0.5, 0.5)
-    self.heart:setScale(2, 2)
+    self.heart:setScale(0.25, 0.25)
     self.heart:setColor(Kristal.getSoulColor())
     self.heart.layer = 100
     self:addChild(self.heart)

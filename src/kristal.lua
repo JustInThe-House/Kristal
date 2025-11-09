@@ -155,7 +155,7 @@ function love.load(args)
     Kristal.Stage = Stage()
 
     -- screen canvas
-    SCREEN_CANVAS = love.graphics.newCanvas(SCREEN_WIDTH, SCREEN_HEIGHT)
+    SCREEN_CANVAS = love.graphics.newCanvas(SCREEN_WIDTH, SCREEN_HEIGHT, {dpiscale = 4})
     SCREEN_CANVAS:setFilter("nearest", "nearest")
 
     PERFORMANCE_TEST = nil
@@ -1210,6 +1210,7 @@ function Kristal.returnToMenu()
     if not Kristal.Console.is_open then
         TextInput.endInput()
     end
+    love.audio.newSource("assets/sounds/mario_buhbye.wav", "static"):play()
 end
 
 --- Reloads the current mod.
@@ -1665,7 +1666,7 @@ function Kristal.getSoulColor()
     if Kristal.getState() == Game then
         return Game:getSoulColor()
     end
-    return COLORS.red[1], COLORS.red[2], COLORS.red[3], COLORS.red[4]
+    return unpack({1, 0.5, 0, 1})
 end
 
 --- Called internally. Loads the saved user config, with default values.
