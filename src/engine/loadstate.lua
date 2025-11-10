@@ -36,21 +36,7 @@ function Loading:enter(from, dir)
         self:beginLoad()
     end
 
-    self.siner = 0
-    self.factor = 1
-    self.factor2 = 0
-    self.x = (320 / 2) - (self.w / 2)
-    self.y = (240 / 2) - (self.h / 2) - 10
-    self.animation_phase = 0
-    self.animation_phase_timer = 0
-    self.animation_phase_plus = 0
-    self.logo_alpha = 1
-    self.logo_alpha_2 = 1
-    self.skipped = false
-    self.skiptimer = 0
     self.key_check = not Kristal.Args["wait"]
-
-    self.fader_alpha = 0
 
     self.done_loading = false
 end
@@ -78,21 +64,20 @@ function Loading:beginLoad()
 end
 
 function Loading:update()
+
     self.timer_intro = self.timer_intro + DT
     if self.timer_intro > 18.5 and self.timer_intro < 20 then
         self.video_alpha = 19.5-self.timer_intro
-    elseif self.timer_intro >= 20 then
+    elseif self.timer_intro >= 20 and not self.animation_done then
+        self:beginLoad()
         self.animation_done = true
     end
-    if self.done_loading then
-        return
-    end
 
     if self.done_loading then
         return
     end
 
-    if (self.loading_state == Loading.States.DONE) and self.key_check and (self.animation_done or Kristal.Config["skipIntro"]) then
+    if (self.loading_state == Loading.States.DONE) and (self.key_check or self.animation_done or Kristal.Config["skipIntro"]) then
         -- We're done loading! This should only happen once.
         self.done_loading = true
 
@@ -108,22 +93,19 @@ function Loading:update()
     end
 end
 
+
 function Loading:draw()
     if self.video ~= nil then
         Draw.setColor(1, 1, 1, self.video_alpha)
         love.graphics.draw(self.video,0,0)
     end
-    if not self.loading and not self.load_complete then
-        self:beginLoad()
-    end
 end
 
 function Loading:onKeyPressed(key)
     self.key_check = true
-    self.skipped = true
-    --[[if self.loading_state == Loading.States.WAITING then
+    if self.loading_state == Loading.States.WAITING then
         self:beginLoad()
-    end]]
+    end
 end
 
 return Loading
